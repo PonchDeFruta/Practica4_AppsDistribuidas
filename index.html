@@ -18,6 +18,12 @@
     <button onclick="obtenerDatosMeteorologicos2()">Consultar</button>
     <div id="resultado2"></div>
 
+    <h1>Consulta GEONAMES, entrada para openweathermap </h1>
+    <label>Salida: </label>
+    <br>
+    <div id="resultado3"></div>
+
+
 
 
     <script>
@@ -25,6 +31,8 @@
             const apiKey = "52478600bb1675e4cb1fd565206e8e90"; // Reemplaza con tu API Key de OpenWeatherMap
             const ciudad = document.getElementById("ciudadInput").value;
             const url = `http://api.openweathermap.org/data/2.5/weather?q=${ciudad}&appid=${apiKey}`;
+
+            
 
             fetch(url)
                 .then(response => response.json())
@@ -42,16 +50,35 @@
                     document.getElementById("resultado").innerHTML = "Error: " + error.message;
                 });
         }
-        function obtenerDatosMeteorologicos2() {
-            const geonames_username = "pxnchfermon"; // Reemplaza con tu API Key de OpenWeatherMap
-            const ciudad = document.getElementById("ciudadInput2").value;
 
-            const url = `http://api.geonames.org/searchJSON?name=${ciudad}&maxRows=1&username=${geonames_username}`;
+        function obtenerDatosMeteorologicos(cityName) {
+            const apiKey = "52478600bb1675e4cb1fd565206e8e90"; // Reemplaza con tu API Key de OpenWeatherMap
+            const url = `http://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}`;
 
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
-                    
+                    if (data.main && data.weather) {
+                        const temperatura = (data.main.temp - 273.15).toFixed(2) + "°C";
+                        const condicionesClimaticas = data.weather[0].description;
+                        const resultado = `Temperatura: ${temperatura}<br>Condiciones Climáticas: ${condicionesClimaticas}`;
+                        document.getElementById("resultado3").innerHTML = resultado;
+                    } else {
+                        document.getElementById("resultado3").innerHTML = "Datos meteorológicos no disponibles.";
+                    }
+                })
+                .catch(error => {
+                    document.getElementById("resultado3").innerHTML = "Error: " + error.message;
+                });
+        }
+
+        function obtenerDatosMeteorologicos2() {
+            const geonames_username = "pxnchfermon"; // Reemplaza con tu API Key de OpenWeatherMap
+            const ciudad = document.getElementById("ciudadInput2").value;
+            const url = `http://api.geonames.org/searchJSON?name=${ciudad}&maxRows=1&username=${geonames_username}`;
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
                     if (data.geonames && data.geonames.length > 0) { 
                         const ubicacion = data.geonames[0];
                         const Nombre = ubicacion.name;
@@ -59,13 +86,15 @@
                         const CodigoPais= ubicacion.population;
                         const res= `Nombre: ${Nombre} <br>País: ${Pais} <br>CodigoPais: ${CodigoPais}`;
                         document.getElementById("resultado2").innerHTML = res;
+                        obtenerDatosMeteorologicos(Nombre);
+
                     } else {
                         document.getElementById("resultado2").innerHTML = "Datos meteorológicos no disponibles.";
                     }
                 })
                 .catch(error => {
                     document.getElementById("resultado2").innerHTML = "Error: " + error.message;
-                });
+                });       
         }
 
     </script>
