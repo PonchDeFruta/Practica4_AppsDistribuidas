@@ -6,19 +6,19 @@ import requests
 API_KEY = "52478600bb1675e4cb1fd565206e8e90"
 
 # Función para obtener datos meteorológicos
-def obtener_datos_meteorologicos(ciudad):
-    url = f"http://api.openweathermap.org/data/2.5/weather?q={ciudad}&appid={API_KEY}"
-    try:
-        response = requests.get(url)
-        data = response.json()
-        if "main" in data and "weather" in data:
-            temperatura = data["main"]["temp"] - 273.15  # Convertir de Kelvin a Celsius
-            condiciones_climaticas = data["weather"][0]["description"]
-            return f"Temperatura: {temperatura:.2f}°C<br>Condiciones Climáticas: {condiciones_climaticas}"
-        else:
-            return "Datos meteorológicos no disponibles."
-    except Exception as e:
-        return f"Error: {str(e)}"
+#def obtener_datos_meteorologicos(ciudad):
+#    url = f"http://api.openweathermap.org/data/2.5/weather?q={ciudad}&appid={API_KEY}"
+#    try:
+#        response = requests.get(url)
+#        data = response.json()
+#        if "main" in data and "weather" in data:
+#            temperatura = data["main"]["temp"] - 273.15  # Convertir de Kelvin a Celsius
+#            condiciones_climaticas = data["weather"][0]["description"]
+#            return f"Temperatura: {temperatura:.2f}°C<br>Condiciones Climáticas: {condiciones_climaticas}"
+#        else:
+#            return "Datos meteorológicos no disponibles."
+#    except Exception as e:
+#        return f"Error: {str(e)}"
 
 # Clase personalizada para manejar las solicitudes
 class MyHandler(http.server.SimpleHTTPRequestHandler):

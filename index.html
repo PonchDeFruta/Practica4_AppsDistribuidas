@@ -6,11 +6,19 @@
     <title>Consulta Meteorológica</title>
 </head>
 <body>
-    <h1>Consulta Meteorológica</h1>
+    <h1>Consulta Meteorológica (openweathermap)</h1>
     <label for="ciudad">Ciudad:</label>
     <input type="text" id="ciudadInput" placeholder="Escribe el nombre de la ciudad">
     <button onclick="obtenerDatosMeteorologicos()">Consultar</button>
     <div id="resultado"></div>
+
+    <h1>Consulta Meteorológica (Geonames)</h1>
+    <label for="ciudad">Ciudad:</label>
+    <input type="text" id="ciudadInput2" placeholder="Escribe el nombre de la ciudad">
+    <button onclick="obtenerDatosMeteorologicos2()">Consultar</button>
+    <div id="resultado2"></div>
+
+
 
     <script>
         function obtenerDatosMeteorologicos() {
@@ -34,6 +42,32 @@
                     document.getElementById("resultado").innerHTML = "Error: " + error.message;
                 });
         }
+        function obtenerDatosMeteorologicos2() {
+            const geonames_username = "pxnchfermon"; // Reemplaza con tu API Key de OpenWeatherMap
+            const ciudad = document.getElementById("ciudadInput2").value;
+
+            const url = `http://api.geonames.org/searchJSON?name=${ciudad}&maxRows=1&username=${geonames_username}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    
+                    if (data.geonames && data.geonames.length > 0) { 
+                        const ubicacion = data.geonames[0];
+                        const Nombre = ubicacion.name;
+                        const Pais = ubicacion.countryName;
+                        const CodigoPais= ubicacion.population;
+                        const res= `Nombre: ${Nombre} <br>País: ${Pais} <br>CodigoPais: ${CodigoPais}`;
+                        document.getElementById("resultado2").innerHTML = res;
+                    } else {
+                        document.getElementById("resultado2").innerHTML = "Datos meteorológicos no disponibles.";
+                    }
+                })
+                .catch(error => {
+                    document.getElementById("resultado2").innerHTML = "Error: " + error.message;
+                });
+        }
+
     </script>
 </body>
 </html>
